@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rebel in Black Trading Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #2d1b47);
+            color: #f0f0f0;
+            min-height: 100vh;
+            padding: 15px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 165, 0, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 60%, rgba(128, 0, 128, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 40% 80%, rgba(0, 128, 0, 0.1) 0%, transparent 20%);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: rgba(20, 20, 20, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            border: 1px solid #444;
+            position: relative;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ff8c00, #9d4edd, #4caf50);
+            z-index: 1;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1a1a1a, #2d1b47);
+            color: #ff8c00;
+            padding: 20px 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239d4edd' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.7);
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            opacity: 0.9;
+            color: #9d4edd;
+            position: relative;
+            z-index: 1;
+            line-height: 1.4;
+        }
+        
+        .content {
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .calculator, .results {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            width: 100%;
+        }
+        
+        h2 {
+            color: #ff8c00;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #9d4edd;
+            text-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+            font-size: 1.4rem;
+        }
+        
+        .input-group {
+            margin-bottom: 18px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #4caf50;
+            font-size: 0.95rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px 12px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #2a2a2a;
+            color: #f0f0f0;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #9d4edd;
+            box-shadow: 0 0 8px rgba(157, 78, 221, 0.5);
+        }
+        
+        button {
+            background: linear-gradient(to right, #ff8c00, #9d4edd);
+            color: #0a0a0a;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        
+        button:hover, button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
+        }
+        
+        .result-box {
+            background: #2a2a2a;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #4caf50;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            color: #9d4edd;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        
+        .result-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ff8c00;
+            word-break: break-word;
+        }
+        
+        .milestones {
+            margin-top: 25px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-top: 15px;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 400px;
+        }
+        
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+            font-size: 0.9rem;
+        }
+        
+        th {
+            background-color: #2d1b47;
+            color: #ff8c00;
+            position: sticky;
+            left: 0;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #222;
+        }
+        
+        .highlight {
+            background-color: #2d1b47 !important;
+            font-weight: 600;
+            color: #ff8c00;
+        }
+        
+        .note {
+            margin-top: 20px;
+            padding: 15px;
+            background: #2a2a2a;
+            border-left: 4px solid #ff8c00;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+        
+        /* Mobile-specific improvements */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 15px 10px;
+                gap: 15px;
+            }
+            
+            .calculator, .results {
+                padding: 15px;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            input {
+                padding: 12px 10px;
+            }
+            
+            button {
+                padding: 14px 16px;
+                font-size: 1rem;
+            }
+            
+            .result-box {
+                padding: 15px;
+            }
+            
+            .result-value {
+                font-size: 1.3rem;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .content {
+                flex-direction: row;
+                padding: 25px 20px;
+                gap: 25px;
+            }
+            
+            .calculator, .results {
+                flex: 1;
+                min-width: 300px;
+            }
+        }
+        
+        /* Improve touch targets */
+        @media (hover: none) and (pointer: coarse) {
+            button, input {
+                min-height: 44px;
+            }
+            
+            th, td {
+                padding: 14px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>The Rebel in Black Trading Calculator</h1>
+            <p class="subtitle">Calculate your path to trading mastery with our Halloween-themed calculator</p>
+        </header>
+        
+        <div class="content">
+            <div class="calculator">
+                <h2>Investment Parameters</h2>
+                
+                <div class="input-group">
+                    <label for="startingCapital">Starting Capital ($)</label>
+                    <input type="number" id="startingCapital" value="2500" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="gainPerTrade">Gain Per Trade (%)</label>
+                    <input type="number" id="gainPerTrade" value="3.5" min="0.1" step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="targetAmount">Target Amount ($)</label>
+                    <input type="number" id="targetAmount" value="10000000" min="1">
+                </div>
+                
+                <button id="calculateBtn">Calculate Trades Needed</button>
+                
+                <div class="note">
+                    <p><strong>Note:</strong> This calculator assumes consistent gains with no losses, which is not realistic in actual trading. Always account for risk management in your strategy.</p>
+                </div>
+            </div>
+            
+            <div class="results">
+                <h2>Results</h2>
+                
+                <div class="result-box">
+                    <div class="result-title">Number of Trades Needed</div>
+                    <div class="result-value" id="tradesResult">-</div>
+                </div>
+                
+                <div class="result-box">
+                    <div class="result-title">Final Amount</div>
+                    <div class="result-value" id="finalAmount">-</div>
+                </div>
+                
+                <div class="result-box">
+                    <div class="result-title">Growth Multiplier</div>
+                    <div class="result-value" id="growthMultiplier">-</div>
+                </div>
+                
+                <div class="milestones">
+                    <h2>Growth Milestones</h2>
+                    <div class="table-container">
+                        <table id="milestonesTable">
+                            <thead>
+                                <tr>
+                                    <th>Milestone</th>
+                                    <th>Trades</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculateBtn').addEventListener('click', calculateTrades);
+        
+        function calculateTrades() {
+            // Get input values
+            const startingCapital = parseFloat(document.getElementById('startingCapital').value);
+            const gainPerTrade = parseFloat(document.getElementById('gainPerTrade').value) / 100;
+            const targetAmount = parseFloat(document.getElementById('targetAmount').value);
+            
+            // Validate inputs
+            if (isNaN(startingCapital) || isNaN(gainPerTrade) || isNaN(targetAmount) || 
+                startingCapital <= 0 || gainPerTrade <= 0 || targetAmount <= startingCapital) {
+                alert('Please enter valid values. Target must be greater than starting capital.');
+                return;
+            }
+            
+            // Calculate number of trades using compound interest formula
+            // A = P(1 + r)^n  =>  n = log(A/P) / log(1 + r)
+            const n = Math.log(targetAmount / startingCapital) / Math.log(1 + gainPerTrade);
+            const tradesNeeded = Math.ceil(n);
+            
+            // Calculate final amount with exact trades
+            const finalAmount = startingCapital * Math.pow(1 + gainPerTrade, tradesNeeded);
+            const growthMultiplier = finalAmount / startingCapital;
+            
+            // Display results
+            document.getElementById('tradesResult').textContent = tradesNeeded.toLocaleString() + ' trades';
+            document.getElementById('finalAmount').textContent = '$' + finalAmount.toLocaleString(undefined, {maximumFractionDigits: 2});
+            document.getElementById('growthMultiplier').textContent = growthMultiplier.toLocaleString(undefined, {maximumFractionDigits: 2}) + 'x';
+            
+            // Generate milestones
+            generateMilestones(startingCapital, gainPerTrade, tradesNeeded);
+        }
+        
+        function generateMilestones(startingCapital, gainPerTrade, totalTrades) {
+            const milestones = [10000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000];
+            const tableBody = document.getElementById('milestonesTable').querySelector('tbody');
+            tableBody.innerHTML = '';
+            
+            let currentAmount = startingCapital;
+            let tradesCount = 0;
+            let milestoneIndex = 0;
+            
+            while (milestoneIndex < milestones.length && tradesCount <= totalTrades) {
+                if (currentAmount >= milestones[milestoneIndex]) {
+                    // Add this milestone to the table
+                    const row = document.createElement('tr');
+                    if (milestones[milestoneIndex] === 10000000) {
+                        row.classList.add('highlight');
+                    }
+                    
+                    row.innerHTML = `
+                        <td>$${milestones[milestoneIndex].toLocaleString()}</td>
+                        <td>${tradesCount} trades</td>
+                        <td>$${currentAmount.toLocaleString(undefined, {maximumFractionDigits: 2})}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                    milestoneIndex++;
+                } else {
+                    // Move to next trade
+                    tradesCount++;
+                    currentAmount *= (1 + gainPerTrade);
+                    
+                    // Safety check to prevent infinite loop
+                    if (tradesCount > totalTrades * 2) {
+                        break;
+                    }
+                }
+            }
+            
+            // Add final row for target
+            const finalRow = document.createElement('tr');
+            finalRow.classList.add('highlight');
+            finalRow.innerHTML = `
+                <td><strong>Target: $10,000,000</strong></td>
+                <td><strong>${totalTrades} trades</strong></td>
+                <td><strong>$${(startingCapital * Math.pow(1 + gainPerTrade, totalTrades)).toLocaleString(undefined, {maximumFractionDigits: 2})}</strong></td>
+            `;
+            tableBody.appendChild(finalRow);
+        }
+        
+        // Calculate on page load
+        window.addEventListener('load', calculateTrades);
+    </script>
+</body>
+</html>
